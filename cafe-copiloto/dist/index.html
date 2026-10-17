@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#173f35" />
+    <meta name="description" content="Receitas guiadas e ajustes inteligentes para preparar um café melhor." />
+    <title>Café Copiloto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Café Copiloto — início">
+        <span class="brand-mark" aria-hidden="true">●</span>
+        <span>Café Copiloto</span>
+      </a>
+      <button class="history-link" id="historyButton" type="button">
+        <span>Histórico</span>
+        <span class="history-count" id="historyCount">0</span>
+      </button>
+    </header>
+
+    <main id="inicio">
+      <section class="hero">
+        <div class="eyebrow"><span></span> Seu café, no ponto</div>
+        <h1>Um bom café começa com uma receita que faz sentido.</h1>
+        <p>Conte como você quer beber. O Copiloto calcula, guia o preparo e aprende com o seu paladar.</p>
+      </section>
+
+      <section class="planner" aria-labelledby="planner-title">
+        <div class="planner-heading">
+          <div>
+            <p class="step-label">NOVA RECEITA</p>
+            <h2 id="planner-title">Como vai ser o café de hoje?</h2>
+          </div>
+          <span class="time-note">Leva menos de 1 minuto</span>
+        </div>
+
+        <form id="recipeForm">
+          <fieldset>
+            <legend><span>1</span> Escolha o perfil</legend>
+            <div class="choice-grid profile-grid">
+              <label class="choice-card">
+                <input type="radio" name="profile" value="doce" checked />
+                <span class="choice-icon">✦</span>
+                <strong>Doce e redondo</strong>
+                <small>Maciez, equilíbrio e doçura</small>
+              </label>
+              <label class="choice-card">
+                <input type="radio" name="profile" value="brilhante" />
+                <span class="choice-icon">◇</span>
+                <strong>Frutado e brilhante</strong>
+                <small>Clareza, frutas e vivacidade</small>
+              </label>
+              <label class="choice-card">
+                <input type="radio" name="profile" value="equilibrado" />
+                <span class="choice-icon">◒</span>
+                <strong>Equilibrado</strong>
+                <small>Um pouco de tudo, bem integrado</small>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="form-row">
+            <fieldset>
+              <legend><span>2</span> Quanto na xícara?</legend>
+              <div class="volume-control">
+                <button type="button" class="volume-step" data-volume-step="-50" aria-label="Diminuir 50 ml">−</button>
+                <label class="volume-input"><input id="volume" name="volume" type="number" min="100" max="1000" step="10" value="300" required /><span>ml</span></label>
+                <button type="button" class="volume-step" data-volume-step="50" aria-label="Aumentar 50 ml">+</button>
+              </div>
+              <p class="field-help">Quantidade final que você quer beber.</p>
+            </fieldset>
+
+            <fieldset>
+              <legend><span>3</span> Qual método?</legend>
+              <div class="segmented" role="radiogroup" aria-label="Método">
+                <label><input type="radio" name="method" value="papel" checked /><span>Papel</span></label>
+                <label><input type="radio" name="method" value="aco" /><span>Aço</span></label>
+                <label><input type="radio" name="method" value="prensa" /><span>Prensa</span></label>
+              </div>
+            </fieldset>
+          </div>
+
+          <fieldset>
+            <legend><span>4</span> Qual é a torra?</legend>
+            <div class="roast-options">
+              <label><input type="radio" name="roast" value="clara" /><span><i class="bean light"></i>Clara</span></label>
+              <label><input type="radio" name="roast" value="media" checked /><span><i class="bean medium"></i>Média</span></label>
+              <label><input type="radio" name="roast" value="escura" /><span><i class="bean dark"></i>Escura</span></label>
+              <label><input type="radio" name="roast" value="nao_sei" /><span>Não sei</span></label>
+            </div>
+          </fieldset>
+
+          <button class="primary-button" type="submit">Criar minha receita <span>→</span></button>
+        </form>
+      </section>
+
+      <section class="recipe-view hidden" id="recipeView" aria-live="polite">
+        <div class="recipe-header">
+          <div>
+            <button class="back-button" id="backButton" type="button">← Ajustar escolhas</button>
+            <p class="step-label">SUA RECEITA</p>
+            <h2 id="recipeTitle">Café doce no papel</h2>
+            <p id="recipeSubtitle">Um ponto de partida pensado para você.</p>
+          </div>
+          <div class="recipe-badge" id="methodBadge">Papel</div>
+        </div>
+
+        <div class="recipe-stats" id="recipeStats"></div>
+
+        <div class="guide-layout">
+          <article class="timeline-card">
+            <div class="section-title-row">
+              <div>
+                <p class="step-label">PASSO A PASSO</p>
+                <h3>Prepare sem perder o ritmo</h3>
+              </div>
+              <button class="start-button" id="startTimer" type="button">▶ Começar preparo</button>
+            </div>
+            <div class="timer-panel hidden" id="timerPanel">
+              <div class="timer-display" id="timerDisplay">00:00</div>
+              <p id="timerInstruction">Prepare tudo e toque em iniciar.</p>
+              <div class="timer-actions">
+                <button id="pauseTimer" type="button">Pausar</button>
+                <button id="resetTimer" type="button">Reiniciar</button>
+              </div>
+            </div>
+            <ol class="timeline" id="timeline"></ol>
+          </article>
+
+          <aside class="observe-card">
+            <p class="step-label">O QUE OBSERVAR</p>
+            <div id="observations"></div>
+            <div class="water-note"><span>◌</span><p><strong>Uma dica simples</strong>Use água filtrada, sem cheiro ou gosto forte.</p></div>
+          </aside>
+        </div>
+
+        <section class="feedback-card" id="feedbackCard">
+          <div>
+            <p class="step-label">DEPOIS DE PROVAR</p>
+            <h3>Como ficou o seu café?</h3>
+            <p>Escolha a sensação mais marcante. Vamos mudar apenas uma coisa na próxima vez.</p>
+          </div>
+          <div class="feedback-grid" id="feedbackGrid">
+            <button type="button" data-feedback="perfeito"><span>♥</span>Perfeito</button>
+            <button type="button" data-feedback="azedo"><span>◔</span>Azedo</button>
+            <button type="button" data-feedback="amargo"><span>◆</span>Amargo</button>
+            <button type="button" data-feedback="fraco"><span>◌</span>Fraco</button>
+            <button type="button" data-feedback="forte"><span>●</span>Forte</button>
+            <button type="button" data-feedback="seco"><span>⌁</span>Seco</button>
+          </div>
+          <div class="adjustment hidden" id="adjustment"></div>
+        </section>
+      </section>
+
+      <section class="history-panel hidden" id="historyPanel" aria-labelledby="historyTitle">
+        <div class="recipe-header">
+          <div>
+            <button class="back-button" id="closeHistory" type="button">← Voltar</button>
+            <p class="step-label">SEUS PREPAROS</p>
+            <h2 id="historyTitle">Histórico de receitas</h2>
+          </div>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </section>
+    </main>
+
+    <footer><span>Café Copiloto</span><p>Receitas são pontos de partida. Seu paladar mostra o caminho.</p></footer>
+    <script src="./app.js"></script>
+  </body>
+</html>
